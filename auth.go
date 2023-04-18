@@ -52,7 +52,11 @@ func readAuthority(hostname, display string) (
 	if err != nil {
 		return "", nil, err
 	}
-	defer r.Close()
+	defer func() {
+		if closeErr := r.Close(); err == nil {
+			err = closeErr
+		}
+	}()
 
 	for {
 		var family uint16

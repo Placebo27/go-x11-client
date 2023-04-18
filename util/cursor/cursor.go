@@ -62,7 +62,7 @@ func LoadImageFromFile(filename string, size int) (*Image, error) {
 	return loadImageFromFile(f, size)
 }
 
-func loadImageFromFile(f *os.File, size int) (*Image, err error) {
+func loadImageFromFile(f *os.File, size int) (img *Image, err error) {
 	d, err := newDecoder(f)
 	if err != nil {
 		return nil, err
@@ -70,6 +70,7 @@ func loadImageFromFile(f *os.File, size int) (*Image, err error) {
 	defer func() {
 		if closeErr := d.close(); err == nil {
 			err = closeErr
+			img = nil
 		}
 	}()
 
@@ -88,8 +89,8 @@ func loadImageFromFile(f *os.File, size int) (*Image, err error) {
 			return img, nil
 		}
 	}
-
-	return nil, errImageNotFound
+	err = errImageNotFound
+	return nil, err
 }
 
 func dist(a, b int) int {
@@ -125,7 +126,7 @@ func LoadImagesFromFile(filename string, size int) (Images, error) {
 	return loadImagesFromFile(f, size)
 }
 
-func loadImagesFromFile(f *os.File, size int) (Images, err error) {
+func loadImagesFromFile(f *os.File, size int) (images Images, err error) {
 	d, err := newDecoder(f)
 	if err != nil {
 		return nil, err
@@ -133,6 +134,7 @@ func loadImagesFromFile(f *os.File, size int) (Images, err error) {
 	defer func() {
 		if closeErr := d.close(); err == nil {
 			err = closeErr
+			images = nil
 		}
 	}()
 
@@ -154,7 +156,7 @@ func loadImagesFromFile(f *os.File, size int) (Images, err error) {
 			idx++
 		}
 	}
-	return images, nil
+	return images, err
 }
 
 func (images Images) ToGIF() *gif.GIF {

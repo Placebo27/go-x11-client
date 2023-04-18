@@ -62,7 +62,7 @@ func LoadImageFromFile(filename string, size int) (*Image, error) {
 	return loadImageFromFile(f, size)
 }
 
-func loadImageFromFile(f *os.File, size int) (name *Image, err error) {
+func loadImageFromFile(f *os.File, size int) (*Image, err error) {
 	d, err := newDecoder(f)
 	if err != nil {
 		return nil, err

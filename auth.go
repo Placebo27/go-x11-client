@@ -55,6 +55,8 @@ func readAuthority(hostname, display string) (
 	defer func() {
 		if closeErr := r.Close(); err == nil {
 			err = closeErr
+		}else {
+			log.Printf("error on close file %v: %v", r.Name(), closeErr)
 		}
 	}()
 

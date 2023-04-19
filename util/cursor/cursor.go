@@ -123,6 +123,14 @@ func (d *decoder) findBestSize(size int) (bestSize, nSizes int) {
 
 type Images []*Image
 
+func LoadImagesFromFile(filename string, size int) (Images, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	return loadImagesFromFile(f, size)
+}
+
 func loadImagesFromFile(f *os.File, size int) (images Images, err error) {
 	d, err := newDecoder(f)
 	if err != nil {
